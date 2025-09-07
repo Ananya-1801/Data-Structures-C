@@ -20,7 +20,7 @@ void create(stack *st)
 
 void Display(stack st)
 {
-    for (int i = st.top; i >= 0; i--)   // ✅ fixed syntax (was `i=st.top,i>=0`)
+    for (int i = st.top; i >= 0; i--)   
     {
         printf("%d ", st.s[i]);
     }

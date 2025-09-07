@@ -1,36 +1,38 @@
-// WAP IN C TO REVERSE THE ELEMENTS OF A STACK USING RECURSION
+//WAP IN C TO REVERSE THE ELEMENTS PRESENT IN A STACK
+
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Stack
+typedef struct Stack
 {
     int size;
     int top;
     int *s;
-} st;
+} stack;
 
-void create(struct Stack *st)
+void create(stack *st)
 {
-    printf("Enter the size of the stack: ");
+    printf("Enter the size of the stack : ");
     scanf("%d", &st->size);
     st->top = -1;
     st->s = (int *)malloc(st->size * sizeof(int));
 }
 
-void Display(struct Stack st)
+void Display(stack st)
 {
-    int i;
-    for (i = st.top; i >= 0; i--)
+    for (int i = st.top; i >= 0; i--)   // ✅ fixed syntax (was `i=st.top,i>=0`)
     {
         printf("%d ", st.s[i]);
     }
     printf("\n");
 }
 
-void push(struct Stack *st, int x)
+void push(stack *st, int x)
 {
     if (st->top == st->size - 1)
+    {
         printf("Stack Overflow!\n");
+    }
     else
     {
         st->top++;
@@ -38,11 +40,13 @@ void push(struct Stack *st, int x)
     }
 }
 
-int pop(struct Stack *st)
+int pop(stack *st)
 {
     int x = -1;
     if (st->top == -1)
-        printf("Underflow!\n");
+    {
+        printf("Stack Underflow!\n");
+    }
     else
     {
         x = st->s[st->top];
@@ -51,17 +55,10 @@ int pop(struct Stack *st)
     return x;
 }
 
-int isEmpty(struct Stack st)
-{
-    if (st.top == -1)
-        return 1;
-    else
-        return 0;
-}
 
-void insertAtBottom(struct Stack *st, int x)
+void insertAtBottom(stack *st, int x)
 {
-    if (isEmpty(*st))
+    if (st->top == -1)
     {
         push(st, x);
         return;
@@ -71,12 +68,12 @@ void insertAtBottom(struct Stack *st, int x)
     push(st, temp);
 }
 
-void reverse(struct Stack *st)
+
+void reverse(stack *st)
 {
-    if (isEmpty(*st))
-    {
+    if (st->top == -1)
         return;
-    }
+
     int temp = pop(st);
     reverse(st);
     insertAtBottom(st, temp);
@@ -84,20 +81,27 @@ void reverse(struct Stack *st)
 
 int main()
 {
-    struct Stack st;
+    stack st;
     create(&st);
 
-    push(&st, 10);
-    push(&st, 20);
-    push(&st, 30);
-    push(&st, 40);
+    int n, val;
+    printf("Enter number of elements to push: ");
+    scanf("%d", &n);
 
-    printf("Original Stack:\n");
+    printf("*********** CREATE STACK ************\n")
+    for (int i = 0; i < n; i++)
+    {
+        printf("Enter element %d: ", i + 1);
+        scanf("%d", &val);
+        push(&st, val);
+    }
+
+    printf("Original Stack: ");
     Display(st);
 
     reverse(&st);
 
-    printf("Reversed Stack:\n");
+    printf("Reversed Stack: ");
     Display(st);
 
     return 0;

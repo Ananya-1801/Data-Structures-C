@@ -1,0 +1,98 @@
+//WAP IN C TO PERFORM PARANTHESES MATCHING USING STACK 
+
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+typedef struct Stack
+{
+    int size;
+    int top;
+    char *s;
+}stack;
+
+void push(stack *st,char x)
+{
+    if(st->top == st->size - 1)
+    {
+        printf("Stack Overflow!\n");
+    }
+    else
+    {
+        st->top++;
+        st->s[st->top] = x;
+    }
+}
+
+char pop(stack *st)
+{
+    char x = -1;
+    if(st->top == -1)
+    {
+        printf("Stack Underflow!\n");
+    }
+    else
+    {
+        x = st->s[st->top];
+        st->top--;
+    }
+    return x;
+}
+
+int isEmpty(stack st)
+{
+    if(st.top == -1)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
+int isBalance(char *exp)
+{
+    stack st;
+    st.size = strlen(exp);
+    st.top = -1;
+    st.s = (char *)malloc(st.size * sizeof(char));
+
+    for(int i=0;exp[i]!='\0';i++)
+    {
+        if(exp[i]=='(')
+        {
+            push(&st,exp[i]);
+        }
+        else if(exp[i] ==')')
+        {
+            if(isEmpty(st))               
+            {
+                free(st.s);
+                return 0;
+            }
+
+            char popped = pop(&st);
+
+        }
+    }
+
+    int balanced = isEmpty(st);
+    free(st.s);
+    return balanced;
+}
+
+int main()
+{
+    stack st;
+    char exp[100];
+    printf("Enter an expression : ");
+    scanf("%s",exp);
+
+    if(isBalance(exp))
+        printf("Parantheses are balanced!\n");
+    else
+        printf("Parantheses are NOT balanced!\n");
+
+    return 0;
+}

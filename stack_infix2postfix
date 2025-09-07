@@ -1,0 +1,127 @@
+//WAP IN C TO CONVERT INFIX EXPRESSION TO POSTFIX EXPRESSION USING STACK AND IT'S OPERATIONS
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Stack
+{
+    int size;
+    int top;
+    char *s;
+} stack;
+
+/* function to check operand, operator, precedence, push, pop, stacktop, isempty*/
+
+void push(stack *st, char x)
+{
+    if (st->top == st->size - 1)
+    {
+        printf("Stack Overflow!\n");
+    }
+    else
+    {
+        st->s[++st->top] = x;
+    }
+}
+
+char pop(stack *st)
+{
+    char x = '\0';
+    if (st->top == -1)
+    {
+        printf("Stack Underflow!\n");
+    }
+    else
+    {
+        x = st->s[st->top--];
+    }
+    return x;
+}
+
+char stacktop(stack st)
+{
+    if (st.top == -1)
+    {
+        return -1;
+    }
+    else
+    {
+        return st.s[st.top];
+    }
+}
+
+int isEmpty(stack st)
+{
+    return (st.top == -1);
+}
+
+int isOperand(char x)
+{
+    if (x == '+' || x == '-' || x == '*' || x == '/')
+        return 0;
+    else
+        return 1;
+}
+
+int Prec(char x)
+{
+    if (x == '+' || x == '-')
+        return 1;
+    else if (x == '*' || x == '/')
+        return 2;
+    return 0;
+}
+
+char *convert(char *infix)
+{
+    stack st;
+    st.size = strlen(infix);
+    st.top = -1;
+    st.s = (char *)malloc(st.size * sizeof(char));
+
+    char *postfix = (char *)malloc((st.size + 1) * sizeof(char));
+
+    int i, j;
+    i = j = 0;
+
+    while (infix[i] != '\0')
+    {
+        if (isOperand(infix[i]))
+        {
+            postfix[j++] = infix[i++];
+        }
+        else
+        {
+            if (Prec(infix[i]) > Prec(stacktop(st)))
+            {
+                push(&st, infix[i++]);
+            }
+            else
+            {
+                postfix[j++] = pop(&st);
+            }
+        }
+    }
+
+    while (!isEmpty(st))
+    {
+        postfix[j++] = pop(&st);
+    }
+
+    postfix[j] = '\0'; // null terminate
+    return postfix;
+}
+
+int main()
+{
+    char infix[100];
+    printf("Enter an expression in infix format : ");
+    scanf("%s", infix);
+
+    char *res = convert(infix);
+    printf("The required post-fix expression is : %s \n", res);
+
+    free(res);
+    return 0;
+}
